@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+
+<head>
+	<link rel="stylesheet" type="text/css" href="webjars/bootstrap/4.3.1/css/bootstrap.min.css" />
+	<meta charset="utf-8">
+	<title>Ajout des Concerts</title>
+</head>
+
+<body>
+	<div th:replace="template"></div>
+	<div class="container mt-5">
+		<div class="card">
+			<div class="card-header" th:if="${mode=='new'}"> Ajout des Concert </div>
+			<div class="card-header" th:if="${mode=='edit'}">Modification des Concert </div>
+			<div class="card-body">
+				<form th:action="@{saveConcert}" method="post">
+					
+					<input name="page" class="form-control" th:value="${page}" />
+					<input name="size" class="form-control" th:value="${size}" />
+					
+					<div class="form-group">
+					    <label class="control-label" hidden>ID Concert :</label>
+						<input type="hidden" name="idConcert" class="form-control" th:value="${concert.idConcert}" />
+					</div>
+					<div class="form-group">
+						<label class="control-label">Nom Concert :</label>
+						<input type="text" name="nomConcert" class="form-control" th:value="${concert.nomConcert}"/>
+						<span th:errors= ${concert.nomConcert} class="text-danger"> </span>
+					</div>
+					<div class="form-group">
+						<label class="control-label">Prix Concert :</label>
+						<input type="text" name="prixConcert" class="form-control" th:value="${concert.prixConcert}"/>
+						<span th:errors= ${concert.prixConcert} class="text-danger"> </span>
+					</div>
+					<div class="form-group">
+						<label class="control-label">Date de création :</label>
+						<input type="date" name="dateConcert" class="form-control" th:value="${concert.dateConcert}"/>
+						<span th:errors= ${concert.dateConcert} class="text-danger"> </span>
+					</div>
+					
+					<div class="form-group">
+					    <label class="control-label">Genre :</label>
+					    <select name="genre" class="form-control"
+					            th:value="${concert.genre.idGenre}"
+					            th:if="${concert.genre != null}">
+					        <option th:each="g : ${genre}" th:if="${mode == 'edit'}"
+					                th:value="${g.idGenre}" th:text="${g.nomGenre}"
+					                th:selected="${g.idGenre == concert.genre.idGenre}">
+					        </option>
+					    </select>
+					    <!-- If it's a new concert or a concert without a genre -->
+					    <select name="genre" class="form-control"
+					            th:if="${concert.genre == null}">
+					        <option th:each="g : ${genre}" th:value="${g.idGenre}"
+					                th:text="${g.nomGenre}">
+					        </option>
+					    </select>
+					</div>
+
+					<div>
+						<button type="submit" class="btn btn-primary">Valider</button>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+</body>
+
+</html>
